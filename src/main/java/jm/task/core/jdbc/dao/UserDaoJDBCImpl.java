@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
+    Connection connection = Util.open();
     public UserDaoJDBCImpl() {
 
     }
@@ -25,8 +26,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 age TINYINT(3) NOT NULL
                 );
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -40,8 +40,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String sql = """
                 DROP TABLE IF EXISTS users;
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -54,8 +53,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 INSERT INTO users (name, last_name, age)
                 VALUES (?, ?, ?);
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age);
@@ -68,13 +66,13 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void removeUserById(long id) {
+        //language=MySQL
         String sql = """
                 DELETE
                 FROM users
                 WHERE id=?;
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -89,8 +87,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 SELECT id, name, last_name, age
                 FROM users;
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -112,11 +109,11 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
+        //language=MySQL
         String sql = """
                 TRUNCATE TABLE users;
                 """;
-        try (Connection connection = Util.open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
             preparedStatement.executeUpdate();
 
