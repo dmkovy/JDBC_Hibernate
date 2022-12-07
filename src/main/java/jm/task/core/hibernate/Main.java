@@ -3,6 +3,7 @@ package jm.task.core.hibernate;
 import jm.task.core.hibernate.model.User;
 import jm.task.core.hibernate.service.UserService;
 import jm.task.core.hibernate.service.UserServiceImpl;
+import jm.task.core.hibernate.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +42,6 @@ public class Main {
         for (User user : userListFromDB) {
             System.out.println(user);
         }
-        System.out.println(userListFromDB);
         System.out.println("Все пользователи из БД получены");
         System.out.println("-----------");
 
@@ -55,6 +55,7 @@ public class Main {
         System.out.println("Таблица удалена");
         System.out.println("-----------");
 
+        Util.closeSessionFactory();
     }
 }
 
